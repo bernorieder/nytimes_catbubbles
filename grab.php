@@ -1,14 +1,16 @@
 <?php
 
-include "conf.php";
-
 set_time_limit(60*60);
 
-$term = urlencode($term);
-$url = "http://api.nytimes.com/svc/search/v2/articlesearch.json?q=".$term."&sort=oldest&api-key=".$key_search."&page=1000";
+include "conf.php";
 
+// prepare term
+$term = urlencode($term);
+
+// bing query into a "folderable" format
 $folder = getcwd()."/json_".preg_replace("/[^a-zA-Z.]/","",$term);
 
+// create folder for JSON files
 if(!file_exists($folder)) { mkdir($folder); }
 
 $hits = 1000;
@@ -25,7 +27,6 @@ while($counter < $hits) {
  		continue;
 	}
 	$data = json_decode($data);
-	//print_r($data);
 
 	foreach($data->response->docs as $doc) {
 		$counter++;
@@ -37,7 +38,7 @@ while($counter < $hits) {
 	$hits = $data->response->meta->hits;
 	$pagecounter++;
 
-	usleep(100000);								// let's be polite
+	usleep(100000);								// let's be polite and wait 100ms between each query
 }
 
 echo "done";
