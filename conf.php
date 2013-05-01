@@ -1,7 +1,8 @@
 <?php
 
-$term = '"gun control"';
+// --- these variables need to be adapted ---
 
-$key_search = "your_api_key";
+$term = '"gun control"';
+$key_search = "your_NYY_search_api_key";
 
 ?>

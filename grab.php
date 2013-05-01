@@ -4,7 +4,7 @@ include "conf.php";
 
 set_time_limit(60*60);
 
-$term = urlencode('"iraq"');
+$term = urlencode($term);
 $url = "http://api.nytimes.com/svc/search/v2/articlesearch.json?q=".$term."&sort=oldest&api-key=".$key_search."&page=1000";
 
 $folder = getcwd()."/json_".preg_replace("/[^a-zA-Z.]/","",$term);
