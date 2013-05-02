@@ -2,12 +2,13 @@
 
 set_time_limit(60*60);
 
+// search query and api key are in:
 include "conf.php";
 
 // prepare term
 $term = urlencode($term);
 
-// bing query into a "folderable" format
+// bring query into a "folderable" format
 $folder = getcwd()."/json_".preg_replace("/[^a-zA-Z.]/","",$term);
 
 // create folder for JSON files

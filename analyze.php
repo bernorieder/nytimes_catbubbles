@@ -1,81 +1,81 @@
 <?php
 
+// adapt to desired value
+$minyears = 10;		// specifies the number of year a category has to appear in order to be included
+
+// search query and api key are in:
 include "conf.php";
 
+// prepare term
 $term = urlencode($term);
 $term = preg_replace("/[^a-zA-Z.]/","",$term);
 $folder = getcwd()."/json_".$term;
 
 $list = scandir($folder);
 
+// shave off . and ..
 array_shift ($list);
 array_shift ($list);
 
+// initialize some variables
 $taglines = array();
+$oldest = 20000;
+$newest = 0;
 
+// iterate over all JSON files
 foreach($list as $fn) {
 	$json = file_get_contents($folder . "/".$fn);
 	$json = json_decode($json);
-	//print_r($json);
+	//print_r($json); exit;
 
+	// iterate over keywords
 	foreach($json->keywords as $keyword) {
+
+		$keyword->value = strtoupper($keyword->value);
+		$keyword->value = preg_replace("/,/"," ", $keyword->value);
 
 		if(!isset($taglines[$keyword->value])) {
 			$taglines[$keyword->value] = array();
 			$taglines[$keyword->value]["type"] = $keyword->name;
 			$taglines[$keyword->value]["time"] = array();
-			$taglines[$keyword->value]["full"] = 0;
-			$taglines[$keyword->value]["full_wc"] = 0;				// word count
 		}
 
 		$year = substr($json->pub_date,0,4);
 
+		if($year < $oldest) { $oldest = $year; }
+		if($year > $newest) { $newest = $year; }
+
 		if(!isset($taglines[$keyword->value]["time"][$year])) {
-			$taglines[$keyword->value]["time"][$year] = 1;
+			$taglines[$keyword->value]["time"][$year] = array();
+			$taglines[$keyword->value]["time"][$year]["count"] = 1;
+			$taglines[$keyword->value]["time"][$year]["wordcount"] = $json->word_count;
 		} else {
-			$taglines[$keyword->value]["time"][$year]++;
+			$taglines[$keyword->value]["time"][$year]["count"]++;
+			$taglines[$keyword->value]["time"][$year]["wordcount"] += $json->word_count;
 		}
 	}
 }
 
-//print_r($taglines);
-
+// filter out keywords that don't appear often enough
 $taglines_filtered = array();
-
 foreach($taglines as $key => $value) {
-	if(count($value["time"]) > 20 && $value["type"] == "subject") {
+	if(count($value["time"]) >= $minyears && $value["type"] == "subject") {
 		$taglines_filtered[$key] = $value;
 	}
 }
 
-//print_r($taglines_filtered);
-
-/*
+// compose and write data format that plays nice with R
+$content = "year,subject,count,wordcount\n";
 foreach($taglines_filtered as $key => $value) {
-	if(!isset($lines[0])) { $lines[0] = "year"; }
-	$lines[0] .=  ",".$key;
-	for($i = 1969; $i <= 2012; $i++) {
-
-		if(!isset($lines[$i])) { $lines[$i] = $i; }
-
+	for($i = $oldest; $i <= $newest; $i++) {
 		if(isset($value["time"][$i])) {
-			$lines[$i] .= "," . $value["time"][$i];
-		} else {
-			$lines[$i] .= ",0";
-		}
-	}
-}
-*/
-
-$content = "year,subject,value\n";
-foreach($taglines_filtered as $key => $value) {
-	for($i = 1969; $i <= 2013; $i++) {
-		if(isset($value["time"][$i])) {
-			$content .= $i . "," . $key . "," . $value["time"][$i] . "\n";
+			$content .= $i . "," . $key . "," . $value["time"][$i]["count"] . "," . $value["time"][$i]["wordcount"] . "\n";
 		}
 	}
 }
 
 file_put_contents(getcwd() . "/data_". $term . ".csv",$content);
+
+echo "done";
 
 ?>
