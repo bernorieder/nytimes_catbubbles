@@ -10,6 +10,7 @@ Make it work
 1) Get a New York Times search API key here: http://developer.nytimes.com/apps/mykeys
 
 2) Put all scripts into a folder and set write permissions for everybody
+
 3) Modify conf.php with your query and your API key
 4) Run grab.php and wait - when finished,
 5) Run analyze.php and wait
