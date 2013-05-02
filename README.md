@@ -12,7 +12,11 @@ Make it work
 2) Put all scripts into a folder and set write permissions for everybody
 
 3) Modify conf.php with your query and your API key
+
 4) Run grab.php and wait - when finished,
+
 5) Run analyze.php and wait
+
 6) Modify the .R scripts to use the .csv file you just generated
+
 7) Run .R scripts
