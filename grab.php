@@ -1,5 +1,13 @@
 <?php
 
+/**
+* New York Times Bubble Explorer
+*
+* @author Bernhard Rieder <rieder@uva.nl>, @riederb
+* @version 0.1
+* @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
+*/
+
 set_time_limit(60*60);
 
 // search query and api key are in:
