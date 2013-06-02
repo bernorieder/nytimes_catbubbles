@@ -15,8 +15,14 @@ Make it work
 
 4) Run grab.php and wait - when finished,
 
+__a) the generate the bubble lines:__
+
 5) Run analyze.php (possibly modify value for $minyears) and wait
 
 6) Modify the .R scripts to use the .csv file you just generated (possibly modify year cutoff)
 
 7) Run .R scripts
+
+__b) to generate a network file (gexf format)__
+
+5) Run network.php and wait
