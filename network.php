@@ -11,9 +11,6 @@
 // using Erik Borra's very useful Gexf class
 require_once("Gexf.class.php");
 
-// adapt to desired value
-$minyears = 10;		// specifies the number of year a category has to appear in order to be included
-
 // search query and api key are in:
 include "conf.php";
 
