@@ -15,7 +15,7 @@ Make it work
 
 4) Run grab.php and wait - when finished,
 
-__a) the generate the bubble lines:__
+__a) to generate the bubble lines:__
 
 5) Run analyze.php (possibly modify value for $minyears) and wait
 
