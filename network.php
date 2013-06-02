@@ -8,6 +8,7 @@
 * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
 */
 
+// using Erik Borra's very useful Gexf class
 require_once("Gexf.class.php");
 
 // adapt to desired value
@@ -27,7 +28,7 @@ $list = scandir($folder);
 array_shift ($list);
 array_shift ($list);
 
-// initialize some variables
+// initialize gexf object
 $gexf = new Gexf();
 $gexf->setTitle("NY Times Categories");
 $gexf->setEdgeType(GEXF_EDGE_UNDIRECTED);
@@ -35,24 +36,17 @@ $gexf->setMode(GEXF_MODE_STATIC);
 $gexf->setTimeFormat(GEXF_TIMEFORMAT_DATE);
 $gexf->setCreator("polsys.net");
 
-//print_r($gexf);
-
 // iterate over all JSON files
 foreach($list as $fn) {
 	$json = file_get_contents($folder . "/".$fn);
 	$json = json_decode($json);
-	//print_r($json);
-	//exit;
 
-
-	// iterate over keywords
+	// iterate over keyword matrix (half)
 	for($i= 0; $i < count($json->keywords); $i++) {
 		$node1 = new GexfNode(strtolower($json->keywords[$i]->value));
 		$node1->addNodeAttribute("type",$json->keywords[$i]->name,$type="string");
 		$gexf->addNode($node1);
 		for($j= $i; $j < count($json->keywords); $j++) {
-			//echo $json->keywords[$i]->value."|";
-			//echo $json->keywords[$j]->value."\n";
 			$node2 = new GexfNode(strtolower($json->keywords[$j]->value));
 			$node2->addNodeAttribute("type",$json->keywords[$j]->name,$type="string");
 			$gexf->addNode($node2);
@@ -62,21 +56,8 @@ foreach($list as $fn) {
 			}
 		}
 	}
-	//print_r($gexf);
-	//break;
 }
 
-/*
-0,node1,10
-1,node2,20
-2,node3,15
-3,node4,5
-edgedef>node1 VARCHAR,node2 VARCHAR
-0,1
-1,2
-2,3
-0,2
-*/
 
 $gexf->render();
 
