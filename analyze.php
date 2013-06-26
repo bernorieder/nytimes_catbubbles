@@ -8,6 +8,7 @@
 * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
 */
 
+
 // adapt to desired value
 $minyears = 10;		// specifies the number of year a category has to appear in order to be included
 
